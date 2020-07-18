@@ -1,0 +1,7 @@
+.idea
+build
+img
+js
+node_modules
+
+*.iml
