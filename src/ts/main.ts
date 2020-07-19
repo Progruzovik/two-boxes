@@ -1,15 +1,17 @@
 import { Application } from "./Application";
 import * as PIXI from "pixi.js";
-import { SpeechService } from "./speech/SpeechService";
+import { SpeechService } from "./service/speech/SpeechService";
+import { ItemService } from "./service/ItemService";
 
-const speechService = new SpeechService();
+const itemService = new ItemService();
+const speechService = new SpeechService(itemService);
 navigator.mediaDevices
     .getUserMedia({ audio: true })
     .then(s => speechService.init(s));
 
 PIXI.Loader.shared.baseUrl = "../";
 PIXI.utils.skipHello();
-const app = new Application(window.devicePixelRatio, window.innerWidth, window.innerHeight, speechService);
+const app = new Application(window.devicePixelRatio, window.innerWidth, window.innerHeight, itemService, speechService);
 document.body.appendChild(app.view);
 
 window.onresize = () => app.resize(window.innerWidth, window.innerHeight);

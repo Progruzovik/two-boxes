@@ -1,5 +1,6 @@
 import { SpeechConverter } from "./SpeechConverter";
 import * as PIXI from "pixi.js";
+import { ItemService } from "../ItemService";
 
 export class SpeechService extends PIXI.utils.EventEmitter {
 
@@ -13,6 +14,10 @@ export class SpeechService extends PIXI.utils.EventEmitter {
     private readonly converter = new SpeechConverter();
 
     private recorder: MediaRecorder;
+
+    constructor(private readonly itemService: ItemService) {
+        super();
+    }
 
     get status(): SpeechService.Status {
         return this._status;
@@ -31,9 +36,10 @@ export class SpeechService extends PIXI.utils.EventEmitter {
                     .convertSpeechToWav(speech)
                     .then(wav => fetch(`${SpeechService.BACKEND_URL}/speech`, { method: "POST", body: wav }))
                     .then(r => r.json())
-                    .then(d => {
-                        this.updateStatus(SpeechService.Status.READY);
+                    .then((d: string[]) => {
                         console.log(d);
+                        this.itemService.checkItem(d);
+                        this.updateStatus(SpeechService.Status.READY);
                     });
                 this.chunks.length = 0;
             }
