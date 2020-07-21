@@ -7,7 +7,7 @@ export class SpeechService extends PIXI.utils.EventEmitter {
     static readonly STATUS_UPDATE = "statusUpdate";
 
     private static readonly RECORDER_INACTIVE = "inactive";
-    private static readonly BACKEND_URL = "http://localhost:8080";
+    private static readonly BACKEND_URL = process.env.NODE_ENV == "production" ? "https://speech-rec.ml" : "http://localhost:8080";
 
     private _status = SpeechService.Status.LOADING;
     private readonly chunks: Blob[] = [];
@@ -71,3 +71,5 @@ export namespace SpeechService {
         PROCESSING
     }
 }
+
+declare var process: any;
