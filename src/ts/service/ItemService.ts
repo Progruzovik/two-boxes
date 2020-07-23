@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { Box, Item } from "../util";
 
 export class ItemService extends PIXI.utils.EventEmitter {
 
@@ -6,30 +7,30 @@ export class ItemService extends PIXI.utils.EventEmitter {
     static readonly MISTAKE = "mistake";
 
     private currentIndex: number;
-    private readonly items: string[] = [];
+    private readonly items: Item[] = [];
 
-    get currentItem(): string {
+    get currentItem(): Item {
         return this.items[this.currentIndex];
     }
 
     constructor() {
         super();
         this.items.push(
-            "ball",
-            "bear",
-            "car",
-            "cat",
-            "doll",
-            "horse",
-            "plane",
-            "ship",
-            "train"
+            { name: "ball", box: Box.Jenny },
+            { name: "bear", box: Box.Jenny },
+            { name: "car", box: Box.Tom },
+            { name: "cat", box: Box.Jenny },
+            { name: "doll", box: Box.Jenny },
+            { name: "horse", box: Box.Jenny },
+            { name: "plane", box: Box.Tom },
+            { name: "ship", box: Box.Tom },
+            { name: "train", box: Box.Tom }
         );
         this.updateItem();
     }
 
     checkItem(data: string[]) {
-        if (data.includes(this.currentItem)) {
+        if (data.includes(this.currentItem.name)) {
             this.updateItem();
             this.emit(ItemService.SUCCESS, this.currentItem);
         } else {

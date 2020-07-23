@@ -38,14 +38,20 @@ export class SpeechService extends PIXI.utils.EventEmitter {
                     .then(r => r.json())
                     .then((d: string[]) => {
                         console.log(d);
+                        this.updateStatus(SpeechService.Status.WAITING);
                         this.itemService.checkItem(d);
-                        this.updateStatus(SpeechService.Status.READY);
                     });
                 this.chunks.length = 0;
             }
         };
 
         this.updateStatus(SpeechService.Status.READY);
+    }
+
+    makeReady() {
+        if (this.status == SpeechService.Status.WAITING) {
+            this.updateStatus(SpeechService.Status.READY);
+        }
     }
 
     start() {
@@ -64,11 +70,12 @@ export class SpeechService extends PIXI.utils.EventEmitter {
 
 export namespace SpeechService {
 
-    export enum Status {
+    export const enum Status {
         LOADING,
         READY,
         RECORDING,
-        PROCESSING
+        PROCESSING,
+        WAITING
     }
 }
 

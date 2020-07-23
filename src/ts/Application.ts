@@ -10,8 +10,10 @@ export class Application extends druid.App {
         super(ratio, width, height, 0xffffff);
         PIXI.Loader.shared
             .add("ball", "img/ball.jpg")
-            .add("bg", "img/bg.jpg")
             .add("bear", "img/bear.png")
+            .add("bg", "img/bg.jpg")
+            .add("box-jenny", "img/box-jenny.png")
+            .add("box-tom", "img/box-tom.png")
             .add("car", "img/car.png")
             .add("cat", "img/cat.jpg")
             .add("doll", "img/doll.png")
