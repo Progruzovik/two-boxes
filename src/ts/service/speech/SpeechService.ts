@@ -9,7 +9,7 @@ export class SpeechService extends PIXI.utils.EventEmitter {
     private static readonly RECORDER_INACTIVE = "inactive";
     private static readonly BACKEND_URL = process.env.NODE_ENV == "production" ? "https://speech-rec.ml" : "http://localhost:8080";
 
-    private _status = SpeechService.Status.LOADING;
+    private _status = SpeechService.Status.Loading;
     private readonly chunks: Blob[] = [];
     private readonly converter = new SpeechConverter();
 
@@ -25,32 +25,38 @@ export class SpeechService extends PIXI.utils.EventEmitter {
 
     init(stream: MediaStream) {
         this.recorder = new MediaRecorder(stream);
-        this.recorder.onstart = () => this.updateStatus(SpeechService.Status.RECORDING);
+        this.recorder.onstart = () => this.updateStatus(SpeechService.Status.Recording);
         this.recorder.ondataavailable = e => {
             this.chunks.push(e.data);
 
             if (this.recorder.state == SpeechService.RECORDER_INACTIVE) {
-                this.updateStatus(SpeechService.Status.PROCESSING);
+                this.updateStatus(SpeechService.Status.Processing);
                 const speech = new Blob(this.chunks, { type: "audio/ogg" });
                 this.converter
                     .convertSpeechToWav(speech)
-                    .then(wav => fetch(`${SpeechService.BACKEND_URL}/speech`, { method: "POST", body: wav }))
+                    .then(wav => {
+                        const excepted: String = this.itemService.createExceptedString();
+                        return fetch(
+                            `${SpeechService.BACKEND_URL}/speech?excepted=${excepted}`,
+                            { method: "POST", body: wav }
+                            )
+                    })
                     .then(r => r.json())
-                    .then((d: string[]) => {
-                        console.log(d);
-                        this.updateStatus(SpeechService.Status.WAITING);
-                        this.itemService.checkItem(d);
+                    .then((r: { recognitionResult: boolean }) => {
+                        console.log(r);
+                        this.updateStatus(SpeechService.Status.Waiting);
+                        this.itemService.checkResult(r.recognitionResult);
                     });
                 this.chunks.length = 0;
             }
         };
 
-        this.updateStatus(SpeechService.Status.READY);
+        this.updateStatus(SpeechService.Status.Ready);
     }
 
     makeReady() {
-        if (this.status == SpeechService.Status.WAITING) {
-            this.updateStatus(SpeechService.Status.READY);
+        if (this.status == SpeechService.Status.Waiting) {
+            this.updateStatus(SpeechService.Status.Ready);
         }
     }
 
@@ -71,11 +77,11 @@ export class SpeechService extends PIXI.utils.EventEmitter {
 export namespace SpeechService {
 
     export const enum Status {
-        LOADING,
-        READY,
-        RECORDING,
-        PROCESSING,
-        WAITING
+        Loading,
+        Ready,
+        Recording,
+        Processing,
+        Waiting
     }
 }
 

@@ -1,6 +1,6 @@
 export const enum Box {
-    Tom,
-    Jenny
+    Tom = "tom's",
+    Jenny = "jenny's"
 }
 
 export interface Item {

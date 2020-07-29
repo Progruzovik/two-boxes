@@ -29,8 +29,12 @@ export class ItemService extends PIXI.utils.EventEmitter {
         this.updateItem();
     }
 
-    checkItem(data: string[]) {
-        if (data.includes(this.currentItem.name)) {
+    createExceptedString(): String {
+        return `put the ${this.currentItem.name} into ${this.currentItem.box} box`
+    }
+
+    checkResult(result: boolean) {
+        if (result) {
             this.updateItem();
             this.emit(ItemService.SUCCESS, this.currentItem);
         } else {

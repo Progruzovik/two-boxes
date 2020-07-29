@@ -31,15 +31,15 @@ export class Root extends druid.Branch {
             this.speechService.makeReady();
         });
         speechService.on(SpeechService.STATUS_UPDATE, (status: SpeechService.Status) => {
-            if (status != SpeechService.Status.WAITING) {
+            if (status != SpeechService.Status.Waiting) {
                 txtStatus.visible = false;
             }
             this.updateButtonState();
         });
         this.btnSpeech.on(druid.Button.TRIGGERED, () => {
-            if (this.speechService.status == SpeechService.Status.RECORDING) {
+            if (this.speechService.status == SpeechService.Status.Recording) {
                 this.speechService.stop();
-            } else if (this.speechService.status == SpeechService.Status.READY) {
+            } else if (this.speechService.status == SpeechService.Status.Ready) {
                 this.speechService.start();
             }
         });
@@ -57,27 +57,27 @@ export class Root extends druid.Branch {
 
     private updateButtonState() {
         switch (this.speechService.status) {
-            case SpeechService.Status.LOADING:
+            case SpeechService.Status.Loading:
                 this.btnSpeech.text = "Loading";
                 this.btnSpeech.isEnabled = false;
                 this.btnSpeech.visible = true;
                 break;
-            case SpeechService.Status.READY:
+            case SpeechService.Status.Ready:
                 this.btnSpeech.text = "Start";
                 this.btnSpeech.isEnabled = true;
                 this.btnSpeech.visible = true;
                 break;
-            case SpeechService.Status.RECORDING:
+            case SpeechService.Status.Recording:
                 this.btnSpeech.text = "Stop";
                 this.btnSpeech.isEnabled = true;
                 this.btnSpeech.visible = true;
                 break;
-            case SpeechService.Status.PROCESSING:
+            case SpeechService.Status.Processing:
                 this.btnSpeech.text = "Processing";
                 this.btnSpeech.isEnabled = false;
                 this.btnSpeech.visible = true;
                 break;
-            case SpeechService.Status.WAITING:
+            case SpeechService.Status.Waiting:
                 this.btnSpeech.visible = false;
                 break;
         }
