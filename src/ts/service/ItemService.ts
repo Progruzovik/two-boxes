@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { Box, Item } from "../util";
+import { Box, Item, RecognitionResult } from "../util";
 
 export class ItemService extends PIXI.utils.EventEmitter {
 
@@ -33,12 +33,12 @@ export class ItemService extends PIXI.utils.EventEmitter {
         return `put the ${this.currentItem.name} into ${this.currentItem.box} box`
     }
 
-    checkResult(result: boolean) {
-        if (result) {
+    checkResult(result: RecognitionResult) {
+        if (result.isRecognized) {
             this.updateItem();
             this.emit(ItemService.SUCCESS, this.currentItem);
         } else {
-            this.emit(ItemService.MISTAKE);
+            this.emit(ItemService.MISTAKE, result.lastWord);
         }
     }
 

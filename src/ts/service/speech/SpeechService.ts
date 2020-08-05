@@ -1,6 +1,7 @@
 import { SpeechConverter } from "./SpeechConverter";
 import * as PIXI from "pixi.js";
 import { ItemService } from "../ItemService";
+import { RecognitionResult } from "../../util";
 
 export class SpeechService extends PIXI.utils.EventEmitter {
 
@@ -42,10 +43,9 @@ export class SpeechService extends PIXI.utils.EventEmitter {
                             )
                     })
                     .then(r => r.json())
-                    .then((r: { recognitionResult: boolean }) => {
-                        console.log(r);
+                    .then((r: RecognitionResult) => {
                         this.updateStatus(SpeechService.Status.Waiting);
-                        this.itemService.checkResult(r.recognitionResult);
+                        this.itemService.checkResult(r);
                     });
                 this.chunks.length = 0;
             }
