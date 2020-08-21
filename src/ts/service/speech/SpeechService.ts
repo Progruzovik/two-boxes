@@ -1,18 +1,16 @@
-import { SpeechConverter } from "./SpeechConverter";
 import * as PIXI from "pixi.js";
 import { ItemService } from "../ItemService";
-import { RecognitionResult } from "../../util";
 
 export class SpeechService extends PIXI.utils.EventEmitter {
 
     static readonly STATUS_UPDATE = "statusUpdate";
 
     private static readonly RECORDER_INACTIVE = "inactive";
-    private static readonly BACKEND_URL = process.env.NODE_ENV == "production" ? "https://speech-rec.ml" : "http://localhost:8080";
+    //private static readonly BACKEND_URL = process.env.NODE_ENV == "production" ? "https://speech-rec.ml" : "http://localhost:8080";
 
     private _status = SpeechService.Status.Loading;
     private readonly chunks: Blob[] = [];
-    private readonly converter = new SpeechConverter();
+    //private readonly converter = new SpeechConverter();
 
     private recorder: MediaRecorder;
 
@@ -31,7 +29,10 @@ export class SpeechService extends PIXI.utils.EventEmitter {
             this.chunks.push(e.data);
 
             if (this.recorder.state == SpeechService.RECORDER_INACTIVE) {
-                this.updateStatus(SpeechService.Status.Processing);
+                this.updateStatus(SpeechService.Status.Waiting);
+                this.itemService.checkResult({ isRecognized: true });
+
+                /*this.updateStatus(SpeechService.Status.Processing);
                 const speech = new Blob(this.chunks, { type: "audio/ogg" });
                 this.converter
                     .convertSpeechToWav(speech)
@@ -46,7 +47,7 @@ export class SpeechService extends PIXI.utils.EventEmitter {
                     .then((r: RecognitionResult) => {
                         this.updateStatus(SpeechService.Status.Waiting);
                         this.itemService.checkResult(r);
-                    });
+                    });*/
                 this.chunks.length = 0;
             }
         };
@@ -85,4 +86,4 @@ export namespace SpeechService {
     }
 }
 
-declare var process: any;
+//declare var process: any;
