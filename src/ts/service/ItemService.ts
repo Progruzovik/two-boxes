@@ -7,7 +7,11 @@ export class ItemService extends PIXI.utils.EventEmitter {
     static readonly MISTAKE = "mistake";
 
     private currentIndex: number;
-    private readonly items: Item[] = [];
+    readonly items: Item[] = [];
+
+    get isFinished(): boolean {
+        return this.items.length == 0;
+    }
 
     get currentItem(): Item {
         return this.items[this.currentIndex];
@@ -17,12 +21,12 @@ export class ItemService extends PIXI.utils.EventEmitter {
         super();
         this.items.push(
             { name: "ball", box: Box.Jenny },
-            { name: "bear", box: Box.Jenny },
-            { name: "car", box: Box.Tom },
             { name: "cat", box: Box.Jenny },
             { name: "doll", box: Box.Jenny },
-            { name: "horse", box: Box.Jenny },
+            { name: "car", box: Box.Tom },
             { name: "plane", box: Box.Tom },
+            { name: "horse", box: Box.Jenny },
+            { name: "bear", box: Box.Jenny },
             { name: "ship", box: Box.Tom },
             { name: "train", box: Box.Tom }
         );
@@ -43,10 +47,9 @@ export class ItemService extends PIXI.utils.EventEmitter {
     }
 
     private updateItem() {
-        let nextIndex: number = this.currentIndex;
-        while (nextIndex == this.currentIndex) {
-            nextIndex = Math.floor(Math.random() * this.items.length);
+        if (this.items.length > 0) {
+            this.items.splice(this.currentIndex, 1);
+            this.currentIndex = Math.floor(Math.random() * this.items.length);
         }
-        this.currentIndex = nextIndex;
     }
 }

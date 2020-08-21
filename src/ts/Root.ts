@@ -10,7 +10,7 @@ export class Root extends druid.Branch {
 
     constructor(private readonly itemService: ItemService, private readonly speechService: SpeechService) {
         super();
-        const stage = new Stage();
+        const stage = new Stage(itemService.items);
         stage.setUpItem(itemService.currentItem);
         this.addChild(stage);
 
@@ -22,6 +22,9 @@ export class Root extends druid.Branch {
         txtStatus.visible = false;
         txtStatus.anchor.set(0.5, 1);
         this.addChild(txtStatus);
+        const txtFinish = new PIXI.Text("That's All Folks!", { align: "center", fontSize: 42 });
+        txtFinish.anchor.set(0.5, 0.5);
+
         this.btnSpeech.pivot.set(this.btnSpeech.width / 2, this.btnSpeech.height);
         this.updateButtonState();
         this.addChild(this.btnSpeech);
@@ -29,7 +32,7 @@ export class Root extends druid.Branch {
         itemService.on(ItemService.SUCCESS, () => {
             txtLastWord.visible = false;
             txtStatus.visible = true;
-            stage.moveCurrentItemIntoBox();
+            stage.moveCurrentToyIntoBox();
         });
         itemService.on(ItemService.MISTAKE, (lastWord: string) => {
             txtLastWord.text = lastWord;
@@ -53,9 +56,14 @@ export class Root extends druid.Branch {
                 this.speechService.start();
             }
         });
-        stage.on(Stage.ITEM_MOVED, () => {
-            stage.setUpItem(this.itemService.currentItem);
-            this.speechService.makeReady();
+        stage.on(Stage.TOY_MOVED, () => {
+            if (this.itemService.isFinished) {
+                this.removeChildren();
+                this.addChild(txtFinish);
+            } else {
+                stage.setUpItem(this.itemService.currentItem);
+                this.speechService.makeReady();
+            }
         });
         this.on(druid.Event.RESIZE, (width, height) => {
             stage.resize(width, height);
@@ -63,6 +71,7 @@ export class Root extends druid.Branch {
             txtLastWord.position.set(width, 0);
             this.btnSpeech.position.set(width / 2, height);
             txtStatus.position.set(this.btnSpeech.x, this.btnSpeech.y - this.btnSpeech.height);
+            txtFinish.position.set(width / 2, height / 2);
         });
     }
 
