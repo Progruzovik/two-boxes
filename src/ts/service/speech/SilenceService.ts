@@ -6,6 +6,7 @@ export class SilenceService extends PIXI.utils.EventEmitter {
     static readonly SILENCE = "silence";
 
     private static readonly SILENCE_TO_NOISE_RATIO = 5 / 6;
+    private static readonly SPEAK_TO_SILENCE_RATIO = 3 / 4;
     private static readonly SILENCE_WAITING_MILLIS = 750;
 
     private isSpeakingStarted = false;
@@ -48,8 +49,10 @@ export class SilenceService extends PIXI.utils.EventEmitter {
                         }
                     }
                 } else {
-                    this.isSpeakingStarted = true;
                     this.lastSilenceTime = 0;
+                }
+                if (silenceCount < frequencyDomain.length * SilenceService.SPEAK_TO_SILENCE_RATIO) {
+                    this.isSpeakingStarted = true;
                 }
             }
         };

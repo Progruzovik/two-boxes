@@ -69,8 +69,10 @@ export class SpeechService extends PIXI.utils.EventEmitter {
     }
 
     start() {
-        this.silenceService.reset();
-        this.recorder.start();
+        setTimeout(() => {
+            this.silenceService.reset();
+            this.recorder.start();
+        }, 100);
     }
 
     stop() {
