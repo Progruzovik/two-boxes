@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import { ItemService } from "../ItemService";
+import { SilenceService } from "./SilenceService";
 
 export class SpeechService extends PIXI.utils.EventEmitter {
 
@@ -14,7 +15,7 @@ export class SpeechService extends PIXI.utils.EventEmitter {
 
     private recorder: MediaRecorder;
 
-    constructor(private readonly itemService: ItemService) {
+    constructor(private readonly silenceService: SilenceService, private readonly itemService: ItemService) {
         super();
     }
 
@@ -52,6 +53,12 @@ export class SpeechService extends PIXI.utils.EventEmitter {
             }
         };
 
+        this.silenceService.on(SilenceService.SILENCE, () => {
+            if (this.status == SpeechService.Status.Recording) {
+                this.stop();
+            }
+        });
+
         this.updateStatus(SpeechService.Status.Ready);
     }
 
@@ -62,6 +69,7 @@ export class SpeechService extends PIXI.utils.EventEmitter {
     }
 
     start() {
+        this.silenceService.reset();
         this.recorder.start();
     }
 

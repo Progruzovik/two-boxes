@@ -1,6 +1,6 @@
 import * as druid from "pixi-druid";
 import * as PIXI from "pixi.js";
-import { Box, Item } from "./util";
+import { Box, Item } from "../util";
 import { Toy } from "./Toy";
 
 export class Stage extends druid.ScalableBranch {

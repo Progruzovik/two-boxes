@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import * as druid from "pixi-druid";
-import { Item } from "./util";
+import { Item } from "../util";
 
 export class Toy extends PIXI.Container {
 

@@ -1,6 +1,6 @@
 import * as druid from "pixi-druid";
 import * as PIXI from "pixi.js";
-import { Root } from "./Root";
+import { Root } from "./screen/Root";
 import { SpeechService } from "./service/speech/SpeechService";
 import { ItemService } from "./service/ItemService";
 

@@ -1,8 +1,8 @@
 import * as druid from "pixi-druid";
 import * as PIXI from "pixi.js";
-import { SpeechService } from "./service/speech/SpeechService";
+import { SpeechService } from "../service/speech/SpeechService";
 import { Stage } from "./Stage";
-import { ItemService } from "./service/ItemService";
+import { ItemService } from "../service/ItemService";
 
 export class Root extends druid.Branch {
 
