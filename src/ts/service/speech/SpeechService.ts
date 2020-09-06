@@ -6,6 +6,7 @@ export class SpeechService extends PIXI.utils.EventEmitter {
 
     static readonly STATUS_UPDATE = "statusUpdate";
 
+    private static readonly RECORDING_DELAY_MS = 100;
     private static readonly RECORDER_INACTIVE = "inactive";
     //private static readonly BACKEND_URL = process.env.NODE_ENV == "production" ? "https://speech-rec.ml" : "http://localhost:8080";
 
@@ -72,7 +73,7 @@ export class SpeechService extends PIXI.utils.EventEmitter {
         setTimeout(() => {
             this.silenceService.reset();
             this.recorder.start();
-        }, 100);
+        }, SpeechService.RECORDING_DELAY_MS);
     }
 
     stop() {

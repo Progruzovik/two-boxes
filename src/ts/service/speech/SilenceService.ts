@@ -7,7 +7,7 @@ export class SilenceService extends PIXI.utils.EventEmitter {
 
     private static readonly SILENCE_TO_NOISE_RATIO = 5 / 6;
     private static readonly SPEAK_TO_SILENCE_RATIO = 3 / 4;
-    private static readonly SILENCE_WAITING_MILLIS = 750;
+    private static readonly SILENCE_WAITING_MS = 750;
 
     private isSpeakingStarted = false;
     private lastSilenceTime = 0;
@@ -43,7 +43,7 @@ export class SilenceService extends PIXI.utils.EventEmitter {
                     if (this.isSpeakingStarted) {
                         if (this.lastSilenceTime == 0) {
                             this.lastSilenceTime = Date.now();
-                        } else if (Date.now() - this.lastSilenceTime >= SilenceService.SILENCE_WAITING_MILLIS) {
+                        } else if (Date.now() - this.lastSilenceTime >= SilenceService.SILENCE_WAITING_MS) {
                             this.reset();
                             this.emit(SilenceService.SILENCE);
                         }
