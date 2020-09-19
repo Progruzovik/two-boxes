@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "audiobuffer-to-wav": "^1.0.0",
-    "pixi-druid": "^1.1.22"
+    "pixi-druid": "^1.1.25"
   }
 }
